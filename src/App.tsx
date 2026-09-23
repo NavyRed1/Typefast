@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useSave } from './hooks/useSave';
 import type { AreaId, BattleKind, Difficulty } from './core/types';
 import type { BattleConfig, BattleResult } from './core/battle';
@@ -207,6 +208,7 @@ export default function App() {
         {body}
       </div>
       <Analytics />
+      <SpeedInsights />
     </>
   );
 }
