@@ -1,6 +1,6 @@
 # TypeQuest
 
-A pixel-art typing RPG. Your keyboard is your sword — every battle is fought
+A pixel-art typing RPG. Your keyboard is your sword - every battle is fought
 by typing the passage on screen, and your speed, accuracy and combo decide
 how hard you hit.
 
