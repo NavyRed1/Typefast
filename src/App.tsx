@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { useSave } from './hooks/useSave';
 import type { AreaId, BattleKind, Difficulty } from './core/types';
 import type { BattleConfig, BattleResult } from './core/battle';
@@ -191,19 +192,22 @@ export default function App() {
   }
 
   return (
-    <div
-      className={save.settings.reducedMotion ? 'reduced-motion' : undefined}
-      style={{
-        minHeight: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 24,
-        background: 'radial-gradient(circle at 50% 0%, #121520 0%, #05060a 70%)',
-      }}
-    >
-      {body}
-    </div>
+    <>
+      <div
+        className={save.settings.reducedMotion ? 'reduced-motion' : undefined}
+        style={{
+          minHeight: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 24,
+          background: 'radial-gradient(circle at 50% 0%, #121520 0%, #05060a 70%)',
+        }}
+      >
+        {body}
+      </div>
+      <Analytics />
+    </>
   );
 }
 
