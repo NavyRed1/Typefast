@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { BattleConfig, BattleResult } from '../core/battle';
 import type { CharacterId } from '../core/types';
 import { useBattleManager } from '../hooks/useBattleManager';
+import { useEscapeKey } from '../hooks/useEscapeKey';
+import { TypeCapture } from '../components/TypeCapture';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { Player } from '../components/Player';
 import { Enemy } from '../components/Enemy';
@@ -54,6 +56,8 @@ export function BattleScreen({
   }, [snapshot.state, battle, onFinish]);
 
   const showCountdown = count > 0;
+  const inputEnabled = !showCountdown && !snapshot.paused && snapshot.state === 'fighting';
+  useEscapeKey(snapshot.state === 'fighting' && !showCountdown, () => setPaused(!snapshot.paused));
   useKeyboardInput({
     enabled: !showCountdown && !snapshot.paused && snapshot.state === 'fighting',
     onChar: handleChar,
@@ -86,8 +90,9 @@ export function BattleScreen({
           backdropFilter: 'blur(0.5px)',
           border: '2px solid #2a3042',
           boxShadow: '4px 4px 0 #05060a',
-          padding: '24px 32px',
+          padding: 'clamp(12px, 4vw, 24px) clamp(10px, 5vw, 32px)',
           minHeight: 160,
+          gap: 8,
         }}
       >
         <div className={playerShake ? 'tq-shake' : undefined}>
@@ -167,6 +172,9 @@ export function BattleScreen({
         )}
       </div>
 
+      <TypeCapture enabled={inputEnabled} onChar={handleChar} onBackspace={backspace}>
+        <TypingArea typed={snapshot.text.typed} current={snapshot.text.current} rest={snapshot.text.rest} mistake={snapshot.text.mistake} />
+      </TypeCapture>
       <TypingArea typed={snapshot.text.typed} current={snapshot.text.current} rest={snapshot.text.rest} mistake={snapshot.text.mistake} />
 
       {snapshot.passageTime && (

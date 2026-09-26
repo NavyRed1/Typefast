@@ -17,6 +17,7 @@ html,
 body,
 #root {
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -24,6 +25,14 @@ body {
   background: #05060a;
   color: #f5f7ff;
   font-family: 'VT323', monospace;
+  overflow-x: hidden;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+  /* Mobile browsers otherwise show a tap-highlight flash and allow the page
+     to be double-tap-zoomed or pulled-to-refresh mid-battle. */
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: contain;
+  touch-action: manipulation;
   overflow: hidden;
   -webkit-font-smoothing: none;
   font-smooth: never;
