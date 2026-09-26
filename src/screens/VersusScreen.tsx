@@ -89,6 +89,26 @@ export function VersusScreen({
     engine.clearMistake();
     force((n) => n + 1);
   };
+  useEffect(() => {
+    if (!racing) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === 'Backspace') {
+        engine.clearMistake();
+        force((n) => n + 1);
+        e.preventDefault();
+        return;
+      }
+      if (e.key.length === 1) {
+        const res = engine.input(e.key);
+        force((n) => n + 1);
+        if (res.kind === 'correct' && res.passageComplete && !winner) setWinner('player');
+        e.preventDefault();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [racing, winner]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const finishedRef = useRef(false);
   useEffect(() => {
@@ -123,6 +143,7 @@ export function VersusScreen({
         <TypeCapture enabled={racing && !winner} onChar={onPlayerChar} onBackspace={onPlayerBackspace}>
           <TypingArea typed={engine.segments()} current={text[engine.index] ?? ''} rest={text.slice(engine.index + 1)} mistake={engine.mistake ? engine.mistake.typed : null} />
         </TypeCapture>
+        <TypingArea typed={engine.segments()} current={text[engine.index] ?? ''} rest={text.slice(engine.index + 1)} mistake={engine.mistake ? engine.mistake.typed : null} />
         {count > 0 && (
           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(5,6,10,0.8)' }}>
             <Countdown n={count} />

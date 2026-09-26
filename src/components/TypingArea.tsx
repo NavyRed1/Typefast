@@ -20,6 +20,7 @@ export function TypingArea({
       style={{
         fontFamily: "'VT323', monospace",
         fontSize: `clamp(16px, 4.2vw, ${fontSize}px)`,
+        fontSize,
         lineHeight: 1.5,
         letterSpacing: 0.5,
         background: '#0a0c14',
