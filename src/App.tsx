@@ -218,7 +218,6 @@ export default function App() {
           alignItems: 'center',
           justifyContent: 'center',
           padding: 'clamp(10px, 4vw, 24px)',
-          padding: 24,
         }}
       >
         {body}
