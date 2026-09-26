@@ -2,6 +2,7 @@ import React from 'react';
 import type { BattleResult } from '../core/battle';
 import type { RecordSummary } from '../core/progression';
 import { PixelButton } from './PixelButton';
+import { PixelTitle } from './PixelTitle';
 
 const OUTCOME_LABEL: Record<BattleResult['outcome'], { text: string; color: string }> = {
   victory: { text: 'VICTORY', color: '#4ade80' },
@@ -39,8 +40,10 @@ export function ResultScreen({
         maxWidth: '90vw',
       }}
     >
-      <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 22, color: outcome.color, textAlign: 'center' }}>
-        {outcome.text}
+      <div style={{ textAlign: 'center' }}>
+        <PixelTitle size={26} color={outcome.color}>
+          {outcome.text}
+        </PixelTitle>
       </div>
 
       <div

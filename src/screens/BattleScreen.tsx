@@ -9,6 +9,7 @@ import { GameHUD } from '../components/GameHUD';
 import { TypingArea } from '../components/TypingArea';
 import { Countdown } from '../components/DialogueBox';
 import { PixelButton } from '../components/PixelButton';
+import { PixelTitle } from '../components/PixelTitle';
 
 export function BattleScreen({
   config,
@@ -81,7 +82,8 @@ export function BattleScreen({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-end',
-          background: '#05060a',
+          background: 'rgba(5,6,10,0.35)',
+          backdropFilter: 'blur(0.5px)',
           border: '2px solid #2a3042',
           boxShadow: '4px 4px 0 #05060a',
           padding: '24px 32px',
@@ -152,7 +154,7 @@ export function BattleScreen({
               background: 'rgba(5,6,10,0.85)',
             }}
           >
-            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 18, color: '#f5f7ff' }}>PAUSED</div>
+            <PixelTitle size={20}>PAUSED</PixelTitle>
             <div style={{ display: 'flex', gap: 10 }}>
               <PixelButton variant="primary" small onClick={() => setPaused(false)}>
                 RESUME

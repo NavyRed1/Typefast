@@ -1,3 +1,4 @@
+import { PixelTitle } from '../components/PixelTitle';
 import React, { useState } from 'react';
 import type { SaveData } from '../data/save';
 import type { Difficulty } from '../core/types';
@@ -42,7 +43,7 @@ export function ModeSetup({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18, width: '100%', maxWidth: 480 }}>
-      <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 18, color: '#f5f7ff' }}>{TITLE[mode]}</div>
+      <PixelTitle size={20}>{TITLE[mode]}</PixelTitle>
       <p style={{ fontFamily: "'VT323', monospace", fontSize: 18, color: '#a7aec4', margin: 0 }}>{BLURB[mode]}</p>
 
       {mode === 'daily' && (

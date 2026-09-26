@@ -93,7 +93,7 @@ export function createDefaultSave(reducedMotion = false): SaveData {
       animation: 'normal',
       reducedMotion,
       difficulty: 'medium',
-      theme: 'classic',
+      theme: 'moss',
     },
     records: { timeAttack: {}, survival: null, bossRush: null },
   };

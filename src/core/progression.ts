@@ -83,11 +83,11 @@ export const EFFECTS: UnlockDef<EffectId>[] = [
   { id: 'gold', name: 'Gold', level: 22 },
 ];
 export const THEMES: UnlockDef<ThemeId>[] = [
-  { id: 'classic', name: 'Classic Cyan', level: 1 },
-  { id: 'amber', name: 'Amber Terminal', level: 6 },
-  { id: 'jungle', name: 'Jungle Green', level: 10 },
-  { id: 'violet', name: 'Violet Ruins', level: 14 },
-  { id: 'mono', name: 'Mono Steel', level: 20 },
+  { id: 'moss', name: 'Moss', level: 1 },
+  { id: 'mushroom', name: 'Mushroom', level: 6 },
+  { id: 'mangrove', name: 'Mangrove', level: 10 },
+  { id: 'magma', name: 'Magma', level: 14 },
+  { id: 'moonlight', name: 'Moonlight', level: 20 },
 ];
 
 export interface UnlockNotice {

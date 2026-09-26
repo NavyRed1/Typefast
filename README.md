@@ -1,6 +1,6 @@
 # TypeQuest
 
-A pixel-art typing RPG. Your keyboard is your sword - every battle is fought
+A pixel-art typing RPG. Your keyboard is your sword — every battle is fought
 by typing the passage on screen, and your speed, accuracy and combo decide
 how hard you hit.
 
@@ -56,6 +56,31 @@ npm run sim       # headless simulation of the battle/combo/typing logic
 Leveling up (from any mode) unlocks **cosmetics only** — characters,
 outfits, weapons, titles, visual effects, UI themes. It never changes
 difficulty or combat numbers; skill is always what wins a fight.
+
+## Visual style
+
+- **Theme system** — five cosmetic UI themes (Moss, Mushroom, Mangrove, Magma,
+  Moonlight), unlocked by level like every other cosmetic, defined in
+  `src/core/palette.ts` and picked in Settings. They tint UI chrome (the
+  title glow, the level/stats panel) — they do not recolor the battle
+  backdrops, which stay fixed to their own scene (sky/cave/forest).
+- **Buttons** — pill-shaped arcade buttons (`.pixel-btn` in
+  `src/styles/global.css`): a saturated body color, a thick dark outline, a
+  bevel highlight, a hover glow + lift, and a press-down click animation.
+- **Title treatment** — `PixelTitle` recreates a chunky outlined pixel-font
+  look (cream fill, thick dark outline, stacked drop shadow) using
+  `-webkit-text-stroke` + layered `text-shadow` on the Press Start 2P font
+  already in the project — no extra font files needed.
+- **Backdrops** — `src/components/Backdrops.tsx` renders three full-bleed
+  CSS scenes (a forest clearing for menu/dashboard screens, a sky with
+  drifting clouds for outdoor battles, a cave with slanted light shafts for
+  indoor areas) built entirely from gradients and shapes. No raster image
+  assets are bundled, so there's nothing to fetch or license.
+- **Screen transitions** — every screen change slides in via the
+  `tq-screen-enter` keyframe (respects reduced-motion).
+- **Character sprites** — each player class has its own chibi headgear
+  silhouette (helmet / pointed hat / hood / cap) over a shared body shape,
+  still rendered with the box-shadow pixel-grid technique described above.
 
 ## Architecture
 

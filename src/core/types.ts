@@ -11,7 +11,7 @@ export type CharacterId = 'knight' | 'mage' | 'rogue' | 'ranger';
 export type OutfitId = 'default' | 'crimson' | 'emerald' | 'royal' | 'shadow';
 export type WeaponId = 'sword' | 'axe' | 'staff' | 'spear' | 'lightblade';
 export type EffectId = 'spark' | 'ember' | 'frost' | 'candy' | 'gold';
-export type ThemeId = 'classic' | 'amber' | 'jungle' | 'violet' | 'mono';
+export type ThemeId = 'magma' | 'mushroom' | 'moss' | 'mangrove' | 'moonlight';
 
 export type TextStyle =
   | 'base' // follows the chosen difficulty

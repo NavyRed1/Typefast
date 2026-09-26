@@ -1,6 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useSave } from './hooks/useSave';
 import type { AreaId, BattleKind, Difficulty } from './core/types';
 import type { BattleConfig, BattleResult } from './core/battle';
@@ -16,6 +14,7 @@ import { ProfileScreen } from './screens/ProfileScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
 import { ResultScreen } from './components/ResultScreen';
 import { PixelButton } from './components/PixelButton';
+import { ForestBackdrop, SkyBackdrop, CaveBackdrop } from './components/Backdrops';
 
 interface Recipe {
   mode: BattleKind;
@@ -48,6 +47,16 @@ function buildConfig(recipe: Recipe, seed: number): BattleConfig {
     case 'daily':
       return dailyBattleConfig(recipe.difficulty).config;
   }
+}
+
+const INDOOR_AREAS: AreaId[] = ['cave', 'volcano', 'cyber', 'castle'];
+function backdropFor(screen: Screen): React.ReactNode {
+  if (screen.n === 'battle') {
+    const indoor = screen.config.areaId && INDOOR_AREAS.includes(screen.config.areaId);
+    return indoor ? <CaveBackdrop /> : <SkyBackdrop />;
+  }
+  if (screen.n === 'versus') return <SkyBackdrop />;
+  return <ForestBackdrop />;
 }
 
 export default function App() {
@@ -193,23 +202,27 @@ export default function App() {
   }
 
   return (
-    <>
+    <div
+      className={save.settings.reducedMotion ? 'reduced-motion' : undefined}
+      style={{ minHeight: '100%', position: 'relative' }}
+    >
+      {backdropFor(screen)}
       <div
-        className={save.settings.reducedMotion ? 'reduced-motion' : undefined}
+        key={screen.n}
+        className="tq-screen-enter"
         style={{
+          position: 'relative',
+          zIndex: 1,
           minHeight: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           padding: 24,
-          background: 'radial-gradient(circle at 50% 0%, #121520 0%, #05060a 70%)',
         }}
       >
         {body}
       </div>
-      <Analytics />
-      <SpeedInsights />
-    </>
+    </div>
   );
 }
 

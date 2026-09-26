@@ -2,26 +2,27 @@ import React from 'react';
 import type { SaveData } from '../data/save';
 import { levelFromXp } from '../core/progression';
 import { PixelButton } from '../components/PixelButton';
+import { PixelTitle } from '../components/PixelTitle';
+import { PALETTES } from '../core/palette';
 
 export type MenuTarget = 'story' | 'versus' | 'timeattack' | 'survival' | 'bossrush' | 'daily' | 'profile' | 'settings';
 
 export function MainMenu({ save, onSelect }: { save: SaveData; onSelect: (target: MenuTarget) => void }) {
   const info = levelFromXp(save.totalXp);
+  const theme = PALETTES[save.settings.theme];
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 28, width: '100%', maxWidth: 480 }}>
       <div style={{ textAlign: 'center' }}>
+        <PixelTitle size={40}>TYPEQUEST</PixelTitle>
         <div
           style={{
-            fontFamily: "'Press Start 2P', monospace",
-            fontSize: 40,
-            color: '#34d3ff',
-            textShadow: '4px 4px 0 #05060a, 0 0 18px rgba(52,211,255,0.35)',
-            letterSpacing: 2,
+            fontFamily: "'VT323', monospace",
+            fontSize: 17,
+            color: theme.light,
+            marginTop: 8,
+            textShadow: `0 0 10px ${theme.glow}`,
           }}
         >
-          TYPEQUEST
-        </div>
-        <div style={{ fontFamily: "'VT323', monospace", fontSize: 16, color: '#626a80', marginTop: 6 }}>
           An indie pixel RPG fought with your keyboard.
         </div>
       </div>
@@ -34,8 +35,8 @@ export function MainMenu({ save, onSelect }: { save: SaveData; onSelect: (target
           fontSize: 16,
           color: '#a7aec4',
           background: '#121520',
-          border: '2px solid #2a3042',
-          boxShadow: '4px 4px 0 #05060a',
+          border: `2px solid ${theme.mid}`,
+          boxShadow: `4px 4px 0 #05060a, 0 0 14px ${theme.glow}`,
           padding: '8px 16px',
           flexWrap: 'wrap',
           justifyContent: 'center',

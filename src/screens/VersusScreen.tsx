@@ -1,3 +1,4 @@
+import { PixelTitle } from '../components/PixelTitle';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { TypingEngine } from '../core/typing';
 import { generateRace } from '../core/texts';
@@ -110,7 +111,7 @@ export function VersusScreen({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18, width: '100%', maxWidth: 700 }}>
-      <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 18, color: '#f5f7ff' }}>VERSUS</div>
+      <PixelTitle size={20}>VERSUS</PixelTitle>
 
       {count > 0 && (
         <div style={{ display: 'flex', gap: 10, alignItems: 'center', fontFamily: "'VT323', monospace", fontSize: 16 }}>
@@ -137,9 +138,9 @@ export function VersusScreen({
 
       {winner && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' }}>
-          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 20, color: winner === 'player' ? '#4ade80' : '#f85252' }}>
+          <PixelTitle size={24} color={winner === 'player' ? '#4ade80' : '#f85252'}>
             {winner === 'player' ? 'YOU WIN!' : 'YOU LOSE'}
-          </div>
+          </PixelTitle>
           <div style={{ display: 'flex', gap: 10 }}>
             <PixelButton variant="primary" onClick={onRematch}>
               REMATCH
