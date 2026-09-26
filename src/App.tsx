@@ -217,7 +217,7 @@ export default function App() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: 24,
+          padding: 'clamp(10px, 4vw, 24px)',
         }}
       >
         {body}
