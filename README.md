@@ -30,33 +30,6 @@ npm run sim       # headless simulation of the battle/combo/typing logic
 > deliverable — once you run `npm install`, the real `@types/react` takes
 > over and the project builds and runs normally with `npm run dev` / `build`.
 
-## Mobile support
-
-Every typing surface in the game (battle, versus race) is wrapped in
-`src/components/TypeCapture.tsx`, which focuses a visually-hidden `<input>`
-and reads characters from it instead of listening for physical `keydown`
-events. On a phone, tapping the passage focuses that input and the OS
-brings up its normal software keyboard — no on-screen custom keyboard was
-built, since the real one is better (autocorrect off, native key repeat,
-swipe-typing if the user has it, etc.). On desktop the same input is
-auto-focused immediately, so a physical keyboard keeps working exactly as
-before; there's a single code path for both, not two parallel ones.
-
-A few responsive layout adjustments (`clamp()`-based font sizes and
-paddings in `BattleScreen.tsx`, `Player.tsx`, `Enemy.tsx`, `TypingArea.tsx`,
-and `App.tsx`) keep the arena and HUD from overflowing on narrow phone
-screens, and `overscroll-behavior`/`touch-action` are set globally so a
-battle can't be interrupted by an accidental pull-to-refresh or double-tap
-zoom.
-
-**Known limitation:** the hidden-input technique is the standard approach
-for browser-based typing games, but very aggressive predictive/swipe
-keyboards can occasionally batch multiple characters into one event —
-functionally fine (every character still gets typed and counted), but the
-per-character timing that WPM is calculated from can look slightly bursty
-on those keyboards. A plain software QWERTY layout (the default on
-iOS/Android) doesn't have this issue.
-
 ## Controls
 
 - **Type** the highlighted passage — correct characters advance you and
