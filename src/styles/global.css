@@ -1,0 +1,301 @@
+@import '@fontsource/press-start-2p/400.css';
+@import '@fontsource/vt323/400.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  background: #05060a;
+  color: #f5f7ff;
+  font-family: 'VT323', monospace;
+  overflow-x: hidden;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+  /* Mobile browsers otherwise show a tap-highlight flash and allow the page
+     to be double-tap-zoomed or pulled-to-refresh mid-battle. */
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: contain;
+  touch-action: manipulation;
+}
+
+/* Everything that should read as pixel art stays crisp when scaled. */
+.pixel-art,
+.pixel-art img,
+canvas {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+::selection {
+  background: #34d3ff;
+  color: #05060a;
+}
+
+/* Thin pixel-style scrollbars for overflowing panels (profile/leaderboard). */
+.pixel-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+.pixel-scroll::-webkit-scrollbar-track {
+  background: #0a0c14;
+}
+.pixel-scroll::-webkit-scrollbar-thumb {
+  background: #2a3042;
+  border: 2px solid #0a0c14;
+}
+
+@keyframes tq-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+.tq-caret {
+  animation: tq-blink 1s step-end infinite;
+}
+
+@keyframes tq-shake {
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-3px, 2px);
+  }
+  40% {
+    transform: translate(3px, -2px);
+  }
+  60% {
+    transform: translate(-2px, -2px);
+  }
+  80% {
+    transform: translate(2px, 2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+.tq-shake {
+  animation: tq-shake 260ms linear;
+}
+
+@keyframes tq-flash {
+  0% {
+    filter: brightness(1) saturate(1);
+  }
+  30% {
+    filter: brightness(2.4) saturate(0) drop-shadow(0 0 6px #f85252);
+  }
+  100% {
+    filter: brightness(1) saturate(1);
+  }
+}
+.tq-flash {
+  animation: tq-flash 180ms ease-out;
+}
+
+@keyframes tq-float-up {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-38px);
+    opacity: 0;
+  }
+}
+.tq-float {
+  animation: tq-float-up 700ms ease-out forwards;
+}
+
+@keyframes tq-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.tq-pop {
+  animation: tq-pop 240ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tq-shake,
+  .tq-flash,
+  .tq-float,
+  .tq-pop {
+    animation: none !important;
+  }
+}
+
+.reduced-motion .tq-shake,
+.reduced-motion .tq-flash,
+.reduced-motion .tq-float,
+.reduced-motion .tq-pop {
+  animation: none !important;
+}
+
+/* --------------------------------------------------------------- buttons */
+/* Chunky pill-shaped arcade buttons, styled after the reference button
+   sheet: a saturated body color, a thick dark outline, a lighter top-bevel
+   highlight, a hover glow, and a press-down click animation. */
+.pixel-btn {
+  --btn-body: #7bc142;
+  --btn-dark: #3f7a1f;
+  --btn-light: #b6e88a;
+  --btn-text: #16210a;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: var(--btn-text);
+  background: linear-gradient(180deg, var(--btn-light) 0%, var(--btn-body) 38%, var(--btn-body) 100%);
+  border: 3px solid #0a0c14;
+  border-radius: 999px;
+  padding: 12px 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--btn-dark), 0 4px 0 var(--btn-dark);
+  transition: transform 90ms ease, box-shadow 90ms ease, filter 150ms ease;
+  user-select: none;
+}
+.pixel-btn.small {
+  font-size: 10px;
+  padding: 8px 14px;
+}
+.pixel-btn.full {
+  width: 100%;
+}
+.pixel-btn:hover:not(:disabled) {
+  filter: brightness(1.12) saturate(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--btn-dark), 0 0 14px 2px var(--btn-glow, rgba(255,255,255,0.35));
+}
+.pixel-btn:active:not(:disabled) {
+  transform: translateY(2px) scale(0.97);
+  box-shadow: 0 1px 0 var(--btn-dark);
+  filter: brightness(0.96);
+}
+.pixel-btn:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.6) brightness(0.6);
+  box-shadow: 0 4px 0 #05060a;
+}
+.pixel-btn.variant-primary {
+  --btn-body: #3fa9dc;
+  --btn-dark: #1f5f8c;
+  --btn-light: #a7e2f7;
+  --btn-text: #071824;
+  --btn-glow: rgba(63, 169, 220, 0.6);
+}
+.pixel-btn.variant-danger {
+  --btn-body: #e2453f;
+  --btn-dark: #8c2320;
+  --btn-light: #f7a7a3;
+  --btn-text: #2a0705;
+  --btn-glow: rgba(226, 69, 63, 0.6);
+}
+.pixel-btn.variant-default {
+  --btn-glow: rgba(123, 193, 66, 0.55);
+}
+
+/* ---------------------------------------------------------------- title */
+/* Fake pixel-font outline + drop extrusion, after the "Pixel Gamer" title
+   reference: a cream fill, a thick dark-brown outline, and a stacked shadow
+   underneath to read as extruded pixel blocks. */
+.tq-title-outline {
+  color: #f2edc9;
+  -webkit-text-stroke: 3px #4a2f22;
+  paint-order: stroke fill;
+  text-shadow:
+    3px 3px 0 #4a2f22,
+    3px 3px 0 #4a2f22,
+    0 6px 0 #2c1b14,
+    0 10px 18px rgba(0, 0, 0, 0.45);
+}
+
+/* ------------------------------------------------------------ transition */
+@keyframes tq-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.tq-screen-enter {
+  animation: tq-slide-in 260ms cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tq-screen-enter {
+    animation: none;
+  }
+}
+.reduced-motion .tq-screen-enter {
+  animation: none;
+}
+
+/* ------------------------------------------------------------- backdrops */
+@keyframes tq-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-140px);
+  }
+}
+@keyframes tq-twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.tq-cloud {
+  animation: tq-drift 40s linear infinite;
+}
+.tq-twinkle {
+  animation: tq-twinkle 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tq-cloud {
+    animation: none;
+  }
+}
+.reduced-motion .tq-cloud {
+  animation: none;
+}
