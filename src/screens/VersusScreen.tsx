@@ -6,7 +6,6 @@ import { Rng } from '../core/rng';
 import type { Difficulty, CharacterId } from '../core/types';
 import { DIFF_CPS } from '../core/enemies';
 import { TypingArea } from '../components/TypingArea';
-import { TypeCapture } from '../components/TypeCapture';
 import { PixelButton } from '../components/PixelButton';
 import { PlayerSprite, EnemySprite } from '../render/sprites';
 import { Countdown } from '../components/DialogueBox';
@@ -78,17 +77,6 @@ export function VersusScreen({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [racing, difficulty, aiLevel, text]);
 
-  const onPlayerChar = (ch: string) => {
-    if (!racing || winner) return;
-    const res = engine.input(ch);
-    force((n) => n + 1);
-    if (res.kind === 'correct' && res.passageComplete && !winner) setWinner('player');
-  };
-  const onPlayerBackspace = () => {
-    if (!racing || winner) return;
-    engine.clearMistake();
-    force((n) => n + 1);
-  };
   useEffect(() => {
     if (!racing) return;
     const handler = (e: KeyboardEvent) => {
@@ -140,9 +128,6 @@ export function VersusScreen({
       <Lane label={`AI (${aiLevel})`} frac={botFrac} sprite={<EnemySprite kind="goblin" size={4} />} color="#f85252" />
 
       <div style={{ position: 'relative' }}>
-        <TypeCapture enabled={racing && !winner} onChar={onPlayerChar} onBackspace={onPlayerBackspace}>
-          <TypingArea typed={engine.segments()} current={text[engine.index] ?? ''} rest={text.slice(engine.index + 1)} mistake={engine.mistake ? engine.mistake.typed : null} />
-        </TypeCapture>
         <TypingArea typed={engine.segments()} current={text[engine.index] ?? ''} rest={text.slice(engine.index + 1)} mistake={engine.mistake ? engine.mistake.typed : null} />
         {count > 0 && (
           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(5,6,10,0.8)' }}>
