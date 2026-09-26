@@ -93,8 +93,6 @@ export function BattleScreen({
           padding: 'clamp(12px, 4vw, 24px) clamp(10px, 5vw, 32px)',
           minHeight: 160,
           gap: 8,
-          padding: '24px 32px',
-          minHeight: 160,
         }}
       >
         <div className={playerShake ? 'tq-shake' : undefined}>
