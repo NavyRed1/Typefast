@@ -150,3 +150,22 @@ for (const [label, cfg] of [
 }
 
 console.log('\nMode-builder smoke tests complete.');
+
+// --- Stale-save migration (the "blank screen on redeploy" bug) -----------
+import { migrateSave } from '../src/data/save';
+
+{
+  // Simulates a browser that has localStorage from before the cosmetic
+  // theme ids were renamed (classic/amber/jungle/violet/mono -> the new
+  // magma/mushroom/moss/mangrove/moonlight names). Without sanitization,
+  // this would produce settings.theme: 'classic', and PALETTES['classic']
+  // is undefined — any code doing PALETTES[save.settings.theme].light
+  // would throw and crash the whole render tree with a blank screen.
+  const stale = { settings: { theme: 'classic', difficulty: 'nightmare' }, loadout: { character: 'paladin' } };
+  const migrated = migrateSave(stale, false);
+  const validThemes = ['magma', 'mushroom', 'moss', 'mangrove', 'moonlight'];
+  console.assert(validThemes.includes(migrated.settings.theme), 'stale theme id should be sanitized, got ' + migrated.settings.theme);
+  console.assert(['easy', 'medium', 'hard', 'expert'].includes(migrated.settings.difficulty), 'stale difficulty should be sanitized, got ' + migrated.settings.difficulty);
+  console.assert(['knight', 'mage', 'rogue', 'ranger'].includes(migrated.loadout.character), 'stale character id should be sanitized, got ' + migrated.loadout.character);
+  console.log('Stale-save migration OK — sanitized to:', migrated.settings.theme, migrated.settings.difficulty, migrated.loadout.character);
+}

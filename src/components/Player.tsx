@@ -17,7 +17,7 @@ export function Player({
   name?: string;
 }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, width: 140 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, width: 'clamp(88px, 26vw, 140px)' }}>
       <div style={{ height: 84, display: 'flex', alignItems: 'flex-end' }}>
         <PlayerSprite character={character} size={6} hit={hit} />
       </div>

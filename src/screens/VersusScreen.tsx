@@ -1,3 +1,4 @@
+import { PixelTitle } from '../components/PixelTitle';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { TypingEngine } from '../core/typing';
 import { generateRace } from '../core/texts';
@@ -5,6 +6,7 @@ import { Rng } from '../core/rng';
 import type { Difficulty, CharacterId } from '../core/types';
 import { DIFF_CPS } from '../core/enemies';
 import { TypingArea } from '../components/TypingArea';
+import { TypeCapture } from '../components/TypeCapture';
 import { PixelButton } from '../components/PixelButton';
 import { PlayerSprite, EnemySprite } from '../render/sprites';
 import { Countdown } from '../components/DialogueBox';
@@ -76,26 +78,17 @@ export function VersusScreen({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [racing, difficulty, aiLevel, text]);
 
-  useEffect(() => {
-    if (!racing) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
-      if (e.key === 'Backspace') {
-        engine.clearMistake();
-        force((n) => n + 1);
-        e.preventDefault();
-        return;
-      }
-      if (e.key.length === 1) {
-        const res = engine.input(e.key);
-        force((n) => n + 1);
-        if (res.kind === 'correct' && res.passageComplete && !winner) setWinner('player');
-        e.preventDefault();
-      }
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [racing, winner]); // eslint-disable-line react-hooks/exhaustive-deps
+  const onPlayerChar = (ch: string) => {
+    if (!racing || winner) return;
+    const res = engine.input(ch);
+    force((n) => n + 1);
+    if (res.kind === 'correct' && res.passageComplete && !winner) setWinner('player');
+  };
+  const onPlayerBackspace = () => {
+    if (!racing || winner) return;
+    engine.clearMistake();
+    force((n) => n + 1);
+  };
 
   const finishedRef = useRef(false);
   useEffect(() => {
@@ -110,7 +103,7 @@ export function VersusScreen({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18, width: '100%', maxWidth: 700 }}>
-      <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 18, color: '#f5f7ff' }}>VERSUS</div>
+      <PixelTitle size={20}>VERSUS</PixelTitle>
 
       {count > 0 && (
         <div style={{ display: 'flex', gap: 10, alignItems: 'center', fontFamily: "'VT323', monospace", fontSize: 16 }}>
@@ -127,7 +120,9 @@ export function VersusScreen({
       <Lane label={`AI (${aiLevel})`} frac={botFrac} sprite={<EnemySprite kind="goblin" size={4} />} color="#f85252" />
 
       <div style={{ position: 'relative' }}>
-        <TypingArea typed={engine.segments()} current={text[engine.index] ?? ''} rest={text.slice(engine.index + 1)} mistake={engine.mistake ? engine.mistake.typed : null} />
+        <TypeCapture enabled={racing && !winner} onChar={onPlayerChar} onBackspace={onPlayerBackspace}>
+          <TypingArea typed={engine.segments()} current={text[engine.index] ?? ''} rest={text.slice(engine.index + 1)} mistake={engine.mistake ? engine.mistake.typed : null} />
+        </TypeCapture>
         {count > 0 && (
           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(5,6,10,0.8)' }}>
             <Countdown n={count} />
@@ -137,9 +132,9 @@ export function VersusScreen({
 
       {winner && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' }}>
-          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 20, color: winner === 'player' ? '#4ade80' : '#f85252' }}>
+          <PixelTitle size={24} color={winner === 'player' ? '#4ade80' : '#f85252'}>
             {winner === 'player' ? 'YOU WIN!' : 'YOU LOSE'}
-          </div>
+          </PixelTitle>
           <div style={{ display: 'flex', gap: 10 }}>
             <PixelButton variant="primary" onClick={onRematch}>
               REMATCH

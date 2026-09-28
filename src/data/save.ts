@@ -1,4 +1,5 @@
-import type { AreaId, Difficulty, Loadout, ThemeId } from '../core/types';
+import type { AreaId, CharacterId, Difficulty, Loadout, ThemeId } from '../core/types';
+import { DIFFICULTIES } from '../core/types';
 
 export type AnimationLevel = 'off' | 'low' | 'normal' | 'high';
 
@@ -62,6 +63,19 @@ export interface SaveData {
 
 export const SAVE_VERSION = 1;
 
+// Known-good values for fields that are ever persisted as a bare string —
+// if a save was written by an older build that used different ids for one
+// of these (cosmetic renames, etc.), an unrecognized value here would
+// otherwise silently propagate into a lookup like PALETTES[theme] and
+// crash the whole app on load with nothing but a blank screen. Anything
+// not in these lists falls back to the current default instead.
+const VALID_THEMES: ThemeId[] = ['magma', 'mushroom', 'moss', 'mangrove', 'moonlight'];
+const VALID_CHARACTERS: CharacterId[] = ['knight', 'mage', 'rogue', 'ranger'];
+
+function sanitizeEnum<T extends string>(value: unknown, valid: readonly T[], fallback: T): T {
+  return typeof value === 'string' && (valid as readonly string[]).includes(value) ? (value as T) : fallback;
+}
+
 export function createDefaultSave(reducedMotion = false): SaveData {
   return {
     version: SAVE_VERSION,
@@ -93,7 +107,7 @@ export function createDefaultSave(reducedMotion = false): SaveData {
       animation: 'normal',
       reducedMotion,
       difficulty: 'medium',
-      theme: 'classic',
+      theme: 'moss',
     },
     records: { timeAttack: {}, survival: null, bossRush: null },
   };
@@ -113,8 +127,17 @@ export function migrateSave(raw: unknown, reducedMotion = false): SaveData {
     daily: { ...(r.daily ?? {}) },
     story: { ...base.story, ...(r.story ?? {}), cleared: r.story?.cleared ?? [], quests: r.story?.quests ?? {} },
     achievements: { ...(r.achievements ?? {}) },
-    loadout: { ...base.loadout, ...(r.loadout ?? {}) },
-    settings: { ...base.settings, ...(r.settings ?? {}) },
+    loadout: {
+      ...base.loadout,
+      ...(r.loadout ?? {}),
+      character: sanitizeEnum(r.loadout?.character, VALID_CHARACTERS, base.loadout.character),
+    },
+    settings: {
+      ...base.settings,
+      ...(r.settings ?? {}),
+      theme: sanitizeEnum(r.settings?.theme, VALID_THEMES, base.settings.theme),
+      difficulty: sanitizeEnum(r.settings?.difficulty, DIFFICULTIES, base.settings.difficulty),
+    },
     records: {
       timeAttack: { ...(r.records?.timeAttack ?? {}) },
       survival: r.records?.survival ?? null,

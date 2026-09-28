@@ -2,13 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { BattleConfig, BattleResult } from '../core/battle';
 import type { CharacterId } from '../core/types';
 import { useBattleManager } from '../hooks/useBattleManager';
-import { useKeyboardInput } from '../hooks/useKeyboardInput';
+import { useEscapeKey } from '../hooks/useEscapeKey';
+import { TypeCapture } from '../components/TypeCapture';
 import { Player } from '../components/Player';
 import { Enemy } from '../components/Enemy';
 import { GameHUD } from '../components/GameHUD';
 import { TypingArea } from '../components/TypingArea';
 import { Countdown } from '../components/DialogueBox';
 import { PixelButton } from '../components/PixelButton';
+import { PixelTitle } from '../components/PixelTitle';
 
 export function BattleScreen({
   config,
@@ -53,12 +55,8 @@ export function BattleScreen({
   }, [snapshot.state, battle, onFinish]);
 
   const showCountdown = count > 0;
-  useKeyboardInput({
-    enabled: !showCountdown && !snapshot.paused && snapshot.state === 'fighting',
-    onChar: handleChar,
-    onBackspace: backspace,
-    onEscape: () => setPaused(!snapshot.paused),
-  });
+  const inputEnabled = !showCountdown && !snapshot.paused && snapshot.state === 'fighting';
+  useEscapeKey(snapshot.state === 'fighting' && !showCountdown, () => setPaused(!snapshot.paused));
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 900 }}>
@@ -81,11 +79,13 @@ export function BattleScreen({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-end',
-          background: '#05060a',
+          background: 'rgba(5,6,10,0.35)',
+          backdropFilter: 'blur(0.5px)',
           border: '2px solid #2a3042',
           boxShadow: '4px 4px 0 #05060a',
-          padding: '24px 32px',
+          padding: 'clamp(12px, 4vw, 24px) clamp(10px, 5vw, 32px)',
           minHeight: 160,
+          gap: 8,
         }}
       >
         <div className={playerShake ? 'tq-shake' : undefined}>
@@ -152,7 +152,7 @@ export function BattleScreen({
               background: 'rgba(5,6,10,0.85)',
             }}
           >
-            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 18, color: '#f5f7ff' }}>PAUSED</div>
+            <PixelTitle size={20}>PAUSED</PixelTitle>
             <div style={{ display: 'flex', gap: 10 }}>
               <PixelButton variant="primary" small onClick={() => setPaused(false)}>
                 RESUME
@@ -165,7 +165,9 @@ export function BattleScreen({
         )}
       </div>
 
-      <TypingArea typed={snapshot.text.typed} current={snapshot.text.current} rest={snapshot.text.rest} mistake={snapshot.text.mistake} />
+      <TypeCapture enabled={inputEnabled} onChar={handleChar} onBackspace={backspace}>
+        <TypingArea typed={snapshot.text.typed} current={snapshot.text.current} rest={snapshot.text.rest} mistake={snapshot.text.mistake} />
+      </TypeCapture>
 
       {snapshot.passageTime && (
         <div style={{ fontFamily: "'VT323', monospace", fontSize: 14, color: '#f85252' }}>

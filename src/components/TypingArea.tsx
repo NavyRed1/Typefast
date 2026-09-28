@@ -19,7 +19,7 @@ export function TypingArea({
       className="pixel-scroll"
       style={{
         fontFamily: "'VT323', monospace",
-        fontSize,
+        fontSize: `clamp(16px, 4.2vw, ${fontSize}px)`,
         lineHeight: 1.5,
         letterSpacing: 0.5,
         background: '#0a0c14',

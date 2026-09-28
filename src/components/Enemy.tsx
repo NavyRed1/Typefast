@@ -32,7 +32,7 @@ export function Enemy({
   casting: { name: string; timeLeft: number; total: number } | null;
 }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, width: 160 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, width: 'clamp(100px, 30vw, 160px)' }}>
       <div
         style={{
           fontFamily: "'Press Start 2P', monospace",

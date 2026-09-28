@@ -56,12 +56,13 @@ export function PixelGrid({
 // --------------------------------------------------------------- palettes
 const SKIN = '#e8b98c';
 const OUTLINE = '#05060a';
+const EYE = '#161a24';
 
 export const CHARACTER_PALETTES: Record<CharacterId, Palette> = {
-  knight: { o: OUTLINE, s: SKIN, a: '#c8ced9', b: '#7d8699', c: '#34d3ff', h: '#486eff' },
-  mage: { o: OUTLINE, s: SKIN, a: '#a855f7', b: '#5b2f86', c: '#34d3ff', h: '#f5f7ff' },
-  rogue: { o: OUTLINE, s: SKIN, a: '#4ade80', b: '#1f6b3f', c: '#f5f7ff', h: '#626a80' },
-  ranger: { o: OUTLINE, s: SKIN, a: '#facc15', b: '#8a6a12', c: '#4ade80', h: '#7d8699' },
+  knight: { o: OUTLINE, s: SKIN, e: EYE, a: '#c8ced9', b: '#7d8699', c: '#34d3ff', h: '#486eff', w: '#c8ced9' },
+  mage: { o: OUTLINE, s: SKIN, e: EYE, a: '#a855f7', b: '#5b2f86', c: '#34d3ff', h: '#f5f7ff', w: '#7de5ff' },
+  rogue: { o: OUTLINE, s: SKIN, e: EYE, a: '#3f8f68', b: '#1f6b3f', c: '#f5f7ff', h: '#626a80', w: '#c8ced9' },
+  ranger: { o: OUTLINE, s: SKIN, e: EYE, a: '#e0a83e', b: '#8a6a12', c: '#4ade80', h: '#7d8699', w: '#8a6a12' },
 };
 
 export const ENEMY_PALETTES: Record<string, Palette> = {
@@ -75,23 +76,34 @@ export const ENEMY_PALETTES: Record<string, Palette> = {
 };
 
 // ------------------------------------------------------------ player grid
-// 10x14 blocky adventurer; recolored per class via the palette above.
-const PLAYER_GRID: SpriteGrid = [
-  '..occcoo..',
-  '.occaacco.',
-  '.osaaaaso.',
-  '.osaaaaso.',
-  '..ossso...',
-  '.ohhhhho..',
-  'ohhcccchho',
-  'ohhcccchho',
-  '.oh....ho.',
-  '.oa....ao.',
-  '.oa....ao.',
-  '..o....o..',
-  '..o....o..',
-  '.oo....oo.',
+// Chibi big-head adventurer, after the sticker-sheet reference: a distinct
+// headgear silhouette per class (helmet / pointed hat / hood / cap) plus a
+// shared face/body/legs block, with a small held-item accent pixel on the
+// right so each class silhouette reads at a glance.
+const HEAD_SHAPE: Record<CharacterId, SpriteGrid> = {
+  knight: ['..oaaao....', '.oaaaaao...', '.oaaaaao...'],
+  mage: ['...oao.....', '..oaaao....', '.oaaaaao...'],
+  rogue: ['...oaao....', '..oaaaao...', '.oaaaaao...'],
+  ranger: ['.oa........', '.oaaaoo....', '.oaaaaao...'],
+};
+
+const BODY_SHAPE: SpriteGrid = [
+  '.osaaaso...',
+  '..ossso....',
+  '.ohhhhho...',
+  'ohhcccchho.',
+  'ohhcccchhow',
+  '.oh....ho.w',
+  '.oa....ao.w',
+  '.oa....ao..',
+  '..o....o...',
+  '..o....o...',
+  '.oo....oo..',
 ];
+
+function playerGrid(character: CharacterId): SpriteGrid {
+  return [...HEAD_SHAPE[character], ...BODY_SHAPE];
+}
 
 export function PlayerSprite({
   character,
@@ -108,13 +120,14 @@ export function PlayerSprite({
 }) {
   return (
     <PixelGrid
-      grid={PLAYER_GRID}
+      grid={playerGrid(character)}
       palette={CHARACTER_PALETTES[character]}
       size={size}
       className={[className, hit ? 'tq-flash' : '', cast ? 'tq-pop' : ''].filter(Boolean).join(' ')}
     />
   );
 }
+
 
 // ------------------------------------------------------------ enemy grids
 const ENEMY_GRIDS: Record<EnemyKind, SpriteGrid> = {

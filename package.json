@@ -14,8 +14,6 @@
   "dependencies": {
     "@fontsource/press-start-2p": "^5.1.0",
     "@fontsource/vt323": "^5.1.0",
-    "@vercel/analytics": "^2.0.1",
-    "@vercel/speed-insights": "^1.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
