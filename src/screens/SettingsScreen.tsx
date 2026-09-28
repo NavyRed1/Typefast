@@ -1,10 +1,12 @@
+import { PixelTitle } from '../components/PixelTitle';
 import React from 'react';
 import type { SaveData, AnimationLevel } from '../data/save';
 import type { Difficulty } from '../core/types';
 import { DIFFICULTIES } from '../core/types';
-import { CHARACTERS, TITLES, levelFromXp, isUnlocked } from '../core/progression';
+import { CHARACTERS, TITLES, THEMES, levelFromXp, isUnlocked } from '../core/progression';
 import { PixelButton } from '../components/PixelButton';
 import { PlayerSprite } from '../render/sprites';
+import { PALETTES } from '../core/palette';
 
 const ANIMATION_LEVELS: AnimationLevel[] = ['off', 'low', 'normal', 'high'];
 
@@ -30,7 +32,7 @@ export function SettingsScreen({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: '100%', maxWidth: 560, fontFamily: "'VT323', monospace" }}>
-      <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 18, color: '#f5f7ff' }}>SETTINGS</div>
+      <PixelTitle size={20}>SETTINGS</PixelTitle>
 
       <Section title="Audio">
         <Row label="Music">
@@ -115,6 +117,45 @@ export function SettingsScreen({
             </option>
           ))}
         </select>
+      </Section>
+
+      <Section title="UI Theme (cosmetic only)">
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          {THEMES.map((t) => {
+            const unlocked = isUnlocked(t, level);
+            const swatch = PALETTES[t.id];
+            const active = t.id === save.settings.theme;
+            return (
+              <button
+                key={t.id}
+                disabled={!unlocked}
+                onClick={() => unlocked && patchSettings({ theme: t.id })}
+                title={unlocked ? t.name : `Unlocks at level ${t.level}`}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 6,
+                  background: '#0a0c14',
+                  border: `2px solid ${active ? swatch.accent : '#2a3042'}`,
+                  padding: '8px 10px',
+                  cursor: unlocked ? 'pointer' : 'not-allowed',
+                  opacity: unlocked ? 1 : 0.4,
+                }}
+              >
+                <div
+                  style={{
+                    width: 48,
+                    height: 16,
+                    background: `linear-gradient(90deg, ${swatch.light}, ${swatch.mid}, ${swatch.dark})`,
+                    border: '1px solid #05060a',
+                  }}
+                />
+                <div style={{ fontSize: 12, color: '#a7aec4' }}>{t.name}</div>
+              </button>
+            );
+          })}
+        </div>
       </Section>
 
       <div style={{ display: 'flex', gap: 10 }}>

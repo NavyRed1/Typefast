@@ -1,3 +1,4 @@
+import { PixelTitle } from '../components/PixelTitle';
 import React, { useState } from 'react';
 import type { SaveData } from '../data/save';
 import type { AreaId, Difficulty } from '../core/types';
@@ -27,7 +28,7 @@ export function StorySelect({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: '100%', maxWidth: 640 }}>
-      <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 20, color: '#f5f7ff' }}>STORY</div>
+      <PixelTitle size={22}>STORY</PixelTitle>
 
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontFamily: "'VT323', monospace", fontSize: 16 }}>
         <span style={{ color: '#a7aec4' }}>Difficulty:</span>
